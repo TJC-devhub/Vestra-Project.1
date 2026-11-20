@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="pt-PT"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fio – assistente de estilo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#F1F2F5;--sf:#fff;--ink:#14161F;--mu:#5E6475;--ln:#D9DCE5;--ac:#2D3FD6;--acx:#fff;--have:#1B7556;--buy:#A24A08;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101218;--sf:#1A1D27;--ink:#ECEEF4;--mu:#9AA0B2;--ln:#2B3040;--ac:#8E9CFF;--acx:#10122A;--have:#4FC79A;--buy:#F0A263}}
+:root[data-theme="dark"]{--bg:#101218;--sf:#1A1D27;--ink:#ECEEF4;--mu:#9AA0B2;--ln:#2B3040;--ac:#8E9CFF;--acx:#10122A;--have:#4FC79A;--buy:#F0A263}
+*,*::before,*::after{box-sizing:inherit}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.45 "Instrument Sans",system-ui,sans-serif}
+.app{max-width:520px;height:100%;margin:0 auto;display:flex;flex-direction:column}
+header{padding:14px 18px 8px;display:flex;align-items:baseline;gap:10px}
+h1,h2{font-family:"Bricolage Grotesque",system-ui,sans-serif;margin:0;letter-spacing:-.02em}
+h1{font-size:28px;font-weight:800}
+header span{color:var(--mu);font-size:14px}
+main{flex:1;min-height:0;overflow-y:auto;padding:6px 18px 12px}
+nav{display:flex;border-top:1px solid var(--ln);background:var(--sf)}
+nav button{flex:1;padding:13px 0;border:0;background:none;color:var(--mu);font:inherit;font-size:14px;cursor:pointer}
+nav button[aria-selected="true"]{color:var(--ink);font-weight:600;box-shadow:inset 0 -3px var(--ac)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.me{margin:14px 0 14px 18%;background:var(--ac);color:var(--acx);padding:9px 14px;border-radius:18px 18px 4px 18px;width:fit-content;max-width:82%;margin-left:auto}
+.me img{max-width:100%;border-radius:10px;display:block}
+.bot{margin:14px 0;max-width:92%}
+.card{margin-top:10px;background:var(--sf);border:1px solid var(--ln);border-radius:14px;padding:14px}
+.verdict{font-family:"Bricolage Grotesque",sans-serif;font-size:26px;font-weight:800;line-height:1.1;margin-bottom:4px}
+.pieces{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--ln);border-radius:8px;padding:4px 9px;font-size:14px}
+.chip i{width:12px;height:12px;border-radius:50%;border:1px solid var(--ln)}
+.tag{font-size:12px;font-weight:600}.have{color:var(--have)}.buy{color:var(--buy)}
+.note{color:var(--mu);font-size:13px;margin:6px 0 0}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.btn{border:1px solid var(--ln);background:var(--sf);color:var(--ink);border-radius:999px;padding:6px 13px;font:inherit;font-size:14px;cursor:pointer}
+.btn.on{border-color:var(--ac);color:var(--ac);font-weight:600}
+.composer{padding:8px 18px 12px;background:var(--bg)}
+.quick{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}
+.quick .btn{white-space:nowrap}
+.bar{display:flex;gap:8px}
+.bar input[type=text],.field{flex:1;min-width:0;border:1px solid var(--ln);background:var(--sf);color:var(--ink);border-radius:12px;padding:11px 13px;font:inherit}
+.send{border:0;background:var(--ac);color:var(--acx);border-radius:12px;padding:0 16px;font:inherit;font-weight:600;cursor:pointer}
+.attach{width:44px;border:1px solid var(--ln);background:var(--sf);color:var(--ink);border-radius:12px;font-size:18px;cursor:pointer}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.item{background:var(--sf);border:1px solid var(--ln);border-radius:12px;padding:12px;position:relative}
+.item i{display:block;width:100%;height:46px;border-radius:8px;border:1px solid var(--ln);margin-bottom:8px}
+.item small{color:var(--mu)}
+.item button{position:absolute;top:6px;right:8px;border:0;background:none;color:var(--mu);font-size:18px;cursor:pointer}
+.empty{color:var(--mu);padding:28px 4px}
+h2{font-size:22px;margin:12px 0 2px}
+label{display:block;margin:14px 0 4px;font-weight:600}
+.dots b{display:inline-block;width:7px;height:7px;margin-right:4px;border-radius:50%;background:var(--mu);animation:bl 1s infinite}.dots b:nth-child(2){animation-delay:.15s}.dots b:nth-child(3){animation-delay:.3s}
+@keyframes bl{0%,80%,100%{opacity:.25}40%{opacity:1}}
+@media(prefers-reduced-motion:reduce){.dots b{animation:none}}
+.item img{display:block;width:100%;height:110px;object-fit:cover;border-radius:8px;margin-bottom:8px}
+.send.alt{background:var(--sf);color:var(--ink);border:1px solid var(--ln)}
+</style></head>
+<body><div class="app">
+<header><h1>Fio</h1><span>o teu assistente de estilo</span></header>
+<main id="main" aria-live="polite"></main>
+<div class="composer" id="comp">
+<div class="quick">
+<button class="btn" data-q="O que visto hoje?">O que visto hoje?</button>
+<button class="btn" data-f="Posso comprar ">Posso comprar…</button>
+<button class="btn" data-f="Tenho ">Tenho…</button>
+</div>
+<div class="bar">
+<button class="attach" id="att" aria-label="Anexar foto">＋</button>
+<input type="file" id="file" accept="image/*" hidden>
+<input type="file" id="fcam" accept="image/*" capture="environment" hidden>
+<input type="file" id="fgal" accept="image/*" hidden>
+<input type="text" id="inp" placeholder="Escreve aqui" aria-label="Mensagem" autocomplete="off">
+<button class="send" id="go">Enviar</button>
+</div></div>
+<nav role="tablist">
+<button role="tab" data-t="chat" aria-selected="true">Chat</button>
+<button role="tab" data-t="wardrobe" aria-selected="false">Guarda-roupa</button>
+<button role="tab" data-t="looks" aria-selected="false">Looks</button>
+<button role="tab" data-t="profile" aria-selected="false">Perfil</button>
+</nav></div>
+<script>
+const COL={preto:"#1b1b1f",branco:"#f4f4f2",azul:"#2f56a6",cinzento:"#8d9099",bege:"#cdb89a",verde:"#3f7a4f",castanho:"#7a5436",vermelho:"#b3342f",rosa:"#d98aa6",amarelo:"#e1b73b",laranja:"#d9702b",roxo:"#6b4a9e"};
+const NEU=["preto","branco","cinzento","bege","azul"];
+const TYPES=[["bottom",/cal[çc]as|jeans|cal[çc][õo]es|saia/],["shoes",/sapatilhas|sapatos|botas|t[eé]nis/],["outer",/casaco|blazer|overshirt|jaqueta/],["top",/camisola|camisa|t-?shirt|sweat|polo|top/]];
+const STEM=[["pret","preto"],["branc","branco"],["azu","azul"],["cinzent","cinzento"],["bege","bege"],["verde","verde"],["castanh","castanho"],["vermelh","vermelho"],["rosa","rosa"],["amarel","amarelo"],["laranj","laranja"],["rox","roxo"]];
+const LABEL={top:"Parte de cima",bottom:"Parte de baixo",shoes:"Calçado",outer:"Casaco"};
+let S={items:[],saved:[],budget:""};
+try{const r=localStorage.getItem("fio1");if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+const save=()=>{try{localStorage.setItem("fio1",JSON.stringify(S));return true}catch(e){return false}};
+const $=s=>document.querySelector(s);
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const cap=t=>t.charAt(0).toUpperCase()+t.slice(1);
+let chat=[{r:"bot",h:"Olá. Diz-me algumas peças que tens e mostro-te o que dá para combinar. O que procuras hoje?"}];
+let tab="chat",liked={};
+
+function parse(text){
+ const out=[];
+ text.toLowerCase().replace(/posso comprar|vale a pena comprar|devo comprar|\?/g,"").split(/,|;|\.| e /).forEach(seg=>{
+  seg=seg.trim();let ty=null;
+  for(const [k,re] of TYPES){if(re.test(seg)){ty=k;break}}
+  if(!ty)return;
+  let c=null;for(const [s,n] of STEM){if(seg.includes(s)){c=n;break}}
+  let nm=seg;for(let i=0;i<3;i++)nm=nm.replace(/^(tenho|uns|umas|dois|duas|um|uma|alguns|algumas|\d+)\s+/,"");
+  out.push({id:Math.random().toString(36).slice(2,8),name:cap(nm),type:ty,color:c});
+ });
+ return out;
+}
+const dot=c=>`<i style="background:${COL[c]||"transparent"}"></i>`;
+const chip=(p,tag)=>`<span class="chip">${dot(p.color)}${esc(p.name)}${tag?` <span class="tag ${tag==="já tens"?"have":"buy"}">${tag}</span>`:""}</span>`;
+const compat=(a,b)=>NEU.includes(a.color)||NEU.includes(b.color)||!a.color||!b.color;
+
+function makeLooks(){
+ const T=S.items.filter(i=>i.type==="top"),B=S.items.filter(i=>i.type==="bottom"),H=S.items.filter(i=>i.type==="shoes"),O=S.items.filter(i=>i.type==="outer");
+ const miss={top:{name:"Camisola branca",type:"top",color:"branco"},bottom:{name:"Calças pretas",type:"bottom",color:"preto"},shoes:{name:"Sapatilhas brancas",type:"shoes",color:"branco"}};
+ const res=[];let n=0;
+ const tl=T.length?T:[null],bl=B.length?B:[null],hl=H.length?H:[null];
+ for(const t of tl)for(const b of bl)for(const h of hl){
+  if(t&&b&&!compat(t,b))continue;
+  const parts=[[t||miss.top,t?"já tens":"a comprar"],[b||miss.bottom,b?"já tens":"a comprar"],[h||miss.shoes,h?"já tens":"a comprar"]];
+  if(res.length===2&&O.length)parts.push([O[0],"já tens"]);
+  else if(res.length===2)parts.push([{name:"Overshirt bege",type:"outer",color:"bege"},"a comprar"]);
+  res.push(parts);if(++n>=3)return res;
+ }
+ return res;
+}
+function lookCard(parts,idx,savedView){
+ const key=parts.map(p=>p[0].name).join("|");
+ const buys=parts.some(p=>p[1]==="a comprar");
+ return `<div class="card"><div class="pieces">${parts.map(p=>chip(p[0],p[1])).join("")}</div>
+ ${buys?`<p class="note">Peças a comprar: preço e loja por confirmar. Ainda não há loja ligada.</p>`:""}
+ <div class="row"><button class="btn ${liked[key]==="y"?"on":""}" data-l="${key}" data-v="y">Gosto</button>
+ <button class="btn ${liked[key]==="n"?"on":""}" data-l="${key}" data-v="n">Não gosto</button>
+ ${savedView?`<button class="btn" data-rm="${idx}">Remover</button>`:`<button class="btn" data-sv="${idx}">Guardar look</button>`}</div></div>`;
+}
+let lastLooks=[];
+function looksReply(){
+ if(!S.items.length)return {h:"Ainda não conheço nenhuma peça tua. Escreve, por exemplo, “Tenho calças pretas, jeans azuis e uma camisola branca”."};
+ lastLooks=makeLooks();
+ if(!lastLooks.length)return {h:"Com estas peças não encontrei combinações boas. Diz-me mais algumas peças neutras."};
+ return {h:"Olha o que dá para fazer:"+lastLooks.map((l,i)=>lookCard(l,i)).join("")};
+}
+function verdict(c){
+ const need={top:["bottom","shoes"],bottom:["top","shoes"],shoes:["top","bottom"],outer:["top","bottom"]}[c.type];
+ const A=S.items.filter(i=>i.type===need[0]&&compat(c,i)),B=S.items.filter(i=>i.type===need[1]&&compat(c,i));
+ const all=S.items.filter(i=>need.includes(i.type));
+ if(!all.length)return {h:`Ainda conheço poucas peças tuas para avaliar “${esc(c.name)}”. Diz-me o que tens (por exemplo, calças e sapatilhas) e volto a verificar.`};
+ const dup=S.items.find(i=>i.type===c.type&&i.color===c.color);
+ const n=A.length*B.length;
+ let v,why;
+ if(dup){v="Melhor não";why=`Já tens algo parecido: ${esc(dup.name)}.`}
+ else if(n>=6){v="Vale a pena";why=`Combina com ${A.length+B.length} das tuas peças e dá ${n} looks.`}
+ else if(n>=2){v="Talvez";why=`Dá ${n} looks com o que tens. Só vale se gostares muito.`}
+ else{v="Melhor não";why="Quase não combina com o que tens agora."}
+ return {h:`<div class="card"><div class="verdict">${v}</div><div>${why}</div>
+ <div class="pieces">${chip(c,"a comprar")}</div><div class="pieces">${A.concat(B).slice(0,6).map(p=>chip(p,"já tens")).join("")}</div>
+ <p class="note">Preço e loja: por confirmar. Ainda não há loja ligada.</p></div>`};
+}
+function reply(t){
+ const low=t.toLowerCase();
+ if(/posso comprar|vale a pena|devo comprar/.test(low)){
+  const c=parse(t)[0];
+  return c?verdict(c):{h:"Diz-me qual é a peça, por exemplo: “Posso comprar uma camisa branca?”"};
+ }
+ if(/visto|look|combin/.test(low))return looksReply();
+ const found=parse(t);
+ if(found.length){
+  S.items.push(...found);save();
+  const r=looksReply();
+  return {h:`Guardei ${found.length} ${found.length>1?"peças":"peça"} no teu guarda-roupa: ${found.map(f=>esc(f.name)).join(", ")}.<br>${r.h}`};
+ }
+ return {h:"Percebo roupa por nome e cor. Experimenta “Tenho calças pretas e uma camisa branca” ou “Posso comprar um casaco bege?”"};
+}
+let sampler,busy=false;
+async function getAI(){if(sampler!==undefined)return sampler;try{sampler=(window.claude&&await claude.use("sample"))||null}catch(e){sampler=null}return sampler}
+const SYS=`És o Fio, assistente de estilo em português de Portugal. Ajudas a combinar roupa, a decidir compras e a organizar o guarda-roupa. Responde de forma calorosa, concisa (máximo 3 frases), coerente com a conversa e com o guarda-roupa indicado. Nunca inventes preços, lojas, links nem peças que o utilizador não referiu. Se faltar informação, faz UMA pergunta curta.
+Devolve APENAS JSON: {"reply":string,"addItems":[{"name":string,"type":"top|bottom|shoes|outer","color":"preto|branco|azul|cinzento|bege|verde|castanho|vermelho|rosa|amarelo|laranja|roxo|null","material":string|null}],"action":"none|looks|verdict","candidate":{"name":string,"type":"top|bottom|shoes|outer","color":string|null}|null}
+- addItems: só peças que o utilizador diz que JÁ TEM e que ainda não estão no guarda-roupa.
+- action "looks": quando pede looks ou o que vestir e já há peças. action "verdict": quando pergunta se deve comprar uma peça (preenche candidate). Caso contrário "none".
+- O texto de reply não deve listar os looks nem veredictos: os cartões são mostrados à parte.`;
+async function ai(t){
+ const s=await getAI();if(!s)return null;
+ const hist=chat.filter(x=>x.t).slice(-9,-1).map(x=>(x.r==="me"?"Utilizador: ":"Fio: ")+x.t).join("\n");
+ const wd=S.items.map(i=>`${i.name} (${i.type}, ${i.color||"sem cor"}${i.material?", "+i.material:""})`).join("; ")||"vazio";
+ return s.json(`${SYS}\n\nGuarda-roupa atual: ${wd}\nOrçamento: ${S.budget||"não definido"}\n\nConversa:\n${hist}\n\nUtilizador: ${t}`,{cache:false,modelTier:"quick"});
+}
+function fromAI(j){
+ const ok=x=>x&&x.name&&TYPES.some(([k])=>k===x.type);
+ const fix=x=>({id:Math.random().toString(36).slice(2,8),name:cap(String(x.name)),type:x.type,color:COL[x.color]?x.color:null,material:x.material?String(x.material):null});
+ const add=(Array.isArray(j.addItems)?j.addItems:[]).filter(ok).map(fix).filter(n=>!S.items.some(i=>i.type===n.type&&i.name.toLowerCase()===n.name.toLowerCase()));
+ if(add.length){S.items.push(...add);save()}
+ let h=`<p style="margin:0">${esc(j.reply||"")}</p>`;
+ if(j.action==="looks"&&S.items.length)h+=looksReply().h;
+ if(j.action==="verdict"&&ok(j.candidate))h+=verdict(fix(j.candidate)).h;
+ return {h,t:j.reply||""};
+}
+async function send(t){
+ t=t.trim();if(!t||busy)return;
+ busy=true;
+ chat.push({r:"me",h:esc(t),t});
+ chat.push({r:"bot",h:'<span class="dots" role="status" aria-label="A escrever"><b></b><b></b><b></b></span>'});render();
+ let out;
+ try{const j=await ai(t);out=j?fromAI(j):reply(t)}
+ catch(e){
+  if(e&&e.code==="not_granted")sampler=null;
+  out=reply(t);
+  if(e&&e.code==="rate_limited")out.h='<p class="note">Muitos pedidos seguidos. Resposta simples:</p>'+out.h;
+ }
+ out.t=out.t||out.h.replace(/<[^>]+>/g," ").slice(0,300);
+ chat.pop();chat.push({r:"bot",...out});busy=false;render();
+}
+function render(){
+ const m=$("#main");
+ $("#comp").style.display=tab==="chat"?"":"none";
+ document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.t===tab));
+ if(tab==="chat"){m.innerHTML=chat.map(x=>`<div class="${x.r}">${x.h}</div>`).join("");m.scrollTop=m.scrollHeight}
+ if(tab==="wardrobe"){
+  m.innerHTML=draft?draftHTML():`<h2>Guarda-roupa</h2><div class="bar" style="margin:12px 0"><button class="send" style="flex:1;padding:13px 0" id="cam">Tirar foto</button><button class="send alt" style="flex:1;padding:13px 0" id="gal">Escolher da galeria</button></div>${warn?'<p class="note">Não consegui guardar no navegador. A foto só fica nesta sessão.</p>':""}<div class="bar"><input class="field" id="add" placeholder="Ou escreve: camisa branca" aria-label="Adicionar peça por texto"><button class="send" id="addb">Adicionar</button></div>`+
+  (S.items.length?`<div class="grid">${S.items.map(i=>`<div class="item">${i.photo?`<img src="${i.photo}" alt="${esc(i.name)}">`:`<i style="background:${COL[i.color]||"transparent"}"></i>`}<b>${esc(i.name)}</b><br><small>${LABEL[i.type]}${i.material?" · "+esc(i.material):""}</small><button data-del="${i.id}" aria-label="Remover ${esc(i.name)}">×</button></div>`).join("")}</div>`:`<p class="empty">Ainda não tens peças aqui. Fala comigo no chat ou escreve uma peça acima.</p>`);
+ }
+ if(tab==="looks"){
+  m.innerHTML=`<h2>Looks guardados</h2>`+(S.saved.length?S.saved.map((l,i)=>lookCard(l,i,true)).join(""):`<p class="empty">Nenhum look guardado. Pede “O que visto hoje?” no chat e toca em Guardar look.</p>`);
+ }
+ if(tab==="profile"){
+  const cnt={};S.items.forEach(i=>{if(i.color)cnt[i.color]=(cnt[i.color]||0)+1});
+  const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,3).map(x=>x[0]).join(", ")||"ainda não sei";
+  m.innerHTML=`<h2>O que sei sobre ti</h2>
+  <div class="card"><p style="margin:0">Peças registadas: <b>${S.items.length}</b></p><p style="margin:6px 0 0">Cores mais frequentes: <b>${top}</b></p></div>
+  <label for="bud">Orçamento para roupa por mês</label>
+  <select id="bud" class="field"><option value="">Não definido</option><option>Até 30 €</option><option>30 a 80 €</option><option>Mais de 80 €</option></select>
+  <div class="row"><button class="btn" id="reset">Apagar os meus dados</button></div>
+  <p class="note">Os dados ficam só neste navegador.</p>`;
+  $("#bud").value=S.budget;
+ }
+}
+document.addEventListener("click",e=>{
+ const b=e.target.closest("button");if(!b)return;
+ const d=b.dataset;
+ if(d.t){tab=d.t;render()}
+ else if(d.q){send(d.q)}
+ else if(d.f){const i=$("#inp");i.value=d.f;i.focus()}
+ else if(d.l){liked[d.l]=liked[d.l]===d.v?null:d.v;render()}
+ else if(d.sv!==undefined){S.saved.push(lastLooks[+d.sv].map(([p,t])=>[{...p,photo:undefined},t]));save();b.textContent="Guardado";b.disabled=true}
+ else if(d.rm!==undefined){S.saved.splice(+d.rm,1);save();render()}
+ else if(d.del){S.items=S.items.filter(i=>i.id!==d.del);save();render()}
+ else if(b.id==="go"){send($("#inp").value);$("#inp").value=""}
+ else if(b.id==="att"){$("#file").click()}
+ else if(b.id==="addb"){const f=parse($("#add").value);if(f.length){S.items.push(...f);save()}render()}
+ else if(b.id==="reset"){S={items:[],saved:[],budget:""};save();chat=chat.slice(0,1);render()}
+ else if(d.ap){const p=pend[d.ap];if(p){S.items.push({id:Math.random().toString(36).slice(2,8),name:p.name,type:p.type,color:p.color,material:p.material,photo:p.photo});warn=!save();delete pend[d.ap];b.textContent="Adicionado";b.disabled=true}}
+ else if(b.id==="cam"){$("#fcam").click()}
+ else if(b.id==="gal"){$("#fgal").click()}
+ else if(b.id==="dcancel"){draft=null;render()}
+ else if(b.id==="dsave"){
+  const nm=$("#dn").value.trim();if(!nm){$("#dn").focus();return}
+  S.items.push({id:Math.random().toString(36).slice(2,8),name:cap(nm),type:$("#dt").value,color:$("#dc").value||null,photo:draft.photo,material:$("#dm").value.trim()||null});
+  warn=!save();draft=null;render();
+ }
+});
+$("#inp").addEventListener("keydown",e=>{if(e.key==="Enter"){send(e.target.value);e.target.value=""}});
+const pend={};
+$("#file").addEventListener("change",chatPhoto);
+async function chatPhoto(e){
+ const f=e.target.files[0];e.target.value="";if(!f)return;
+ let r;try{r=await shrink(f)}catch(x){return}
+ chat.push({r:"me",h:`<img src="${r.photo}" alt="Foto enviada">`});
+ chat.push({r:"bot",h:'<span class="dots" role="status" aria-label="A analisar"><b></b><b></b><b></b></span>'});render();
+ let id=null;try{id=await identify(r.blob)}catch(x){}
+ chat.pop();
+ if(id&&!id.error){
+  const k=Math.random().toString(36).slice(2,8);pend[k]={...id,photo:r.photo};
+  chat.push({r:"bot",t:"Identifiquei: "+id.name,h:`<div class="card"><b>${esc(id.name)}</b><div class="pieces"><span class="chip">${dot(id.color)}${id.color||"sem cor"}</span><span class="chip">${LABEL[id.type]}</span>${id.material?`<span class="chip">${esc(id.material)}</span>`:""}</div><div class="row"><button class="btn on" data-ap="${k}">Adicionar ao guarda-roupa</button></div></div>`});
+ }else chat.push({r:"bot",h:id?"Não vejo uma peça de roupa nesta foto. Tenta uma foto só da peça, com boa luz.":"Não consegui analisar a imagem agora. Diz-me o que é, por exemplo “camisa branca”, e eu trato do resto."});
+ render();
+}
+document.addEventListener("change",e=>{if(e.target.id==="bud"){S.budget=e.target.value;save()}});
+let draft=null,warn=false;
+function shrink(file){return new Promise((ok,no)=>{const u=URL.createObjectURL(file),im=new Image();im.onload=()=>{const k=Math.min(1,480/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);c.toBlob(b=>ok({photo:c.toDataURL("image/jpeg",.72),blob:b}),"image/jpeg",.72)};im.onerror=no;im.src=u})}
+const IMG=`Analisa a foto de uma peça de roupa. Devolve APENAS JSON: {"name":string,"type":"top|bottom|shoes|outer","color":"preto|branco|azul|cinzento|bege|verde|castanho|vermelho|rosa|amarelo|laranja|roxo|null","material":string|null}
+- name: nome curto em português de Portugal, ex. "Camisa branca de algodão".
+- material: estimado a partir da imagem (algodão, ganga, lã, couro, linho, sintético...), ou null se não der para perceber.
+- Usa a cor dominante mais próxima da lista. Não inventes marca.
+- Se não houver uma peça de roupa visível, devolve {"error":"sem peça"}.`;
+async function identify(blob){
+ const s=await getAI();if(!s)return null;
+ const lim=await s.limits();if(!lim||!lim.images)return null;
+ const j=await s.json(IMG,{images:[blob],cache:false,modelTier:"quick"});
+ if(!j||j.error||!j.name||!TYPES.some(([k])=>k===j.type))return {error:true};
+ return {name:cap(String(j.name)),type:j.type,color:COL[j.color]?j.color:null,material:j.material?String(j.material):null};
+}
+const stat=s=>({busy:"A analisar a foto…",ok:"Identificado pela IA. Confirma e corrige se precisares.",none:"Não vejo uma peça de roupa na foto. Preenche manualmente.",na:"Análise automática indisponível. Preenche manualmente.",err:"Não consegui analisar a foto. Preenche manualmente."}[s]);
+async function pick(e){
+ const f=e.target.files[0];e.target.value="";if(!f)return;
+ let r;try{r=await shrink(f)}catch(x){return}
+ const d=draft={photo:r.photo,blob:r.blob,name:"",type:"top",color:"",material:"",status:"busy"};
+ tab="wardrobe";render();
+ let id=null;try{id=await identify(r.blob)}catch(x){d.status="err"}
+ if(d.status==="busy"){
+  if(!id)d.status="na";else if(id.error)d.status="none";
+  else{d.status="ok";if(!d.name){d.name=id.name;d.type=id.type;d.color=id.color||""}if(!d.material)d.material=id.material||""}
+ }
+ if(draft===d)render();
+}
+document.addEventListener("input",e=>{if(e.target.id==="dm"&&draft)draft.material=e.target.value});
+document.addEventListener("change",e=>{if(draft&&e.target.id==="dt")draft.type=e.target.value;if(draft&&e.target.id==="dc")draft.color=e.target.value});
+$("#fcam").addEventListener("change",pick);$("#fgal").addEventListener("change",pick);
+function draftHTML(){
+ return `<h2>Nova peça</h2><img src="${draft.photo}" alt="Foto da peça" style="width:100%;max-height:300px;object-fit:cover;border-radius:12px;margin-top:10px">
+ ${draft.status?`<p class="note" role="status">${stat(draft.status)}</p>`:""}<label for="dn">Nome da peça</label><input class="field" id="dn" style="width:100%" placeholder="Ex.: camisa branca" value="${esc(draft.name)}">
+ <label for="dt">Tipo</label><select class="field" id="dt" style="width:100%">${Object.entries(LABEL).map(([k,v])=>`<option value="${k}"${k===draft.type?" selected":""}>${v}</option>`).join("")}</select>
+ <label for="dc">Cor</label><select class="field" id="dc" style="width:100%"><option value="">Sem cor definida</option>${Object.keys(COL).map(c=>`<option${c===draft.color?" selected":""}>${c}</option>`).join("")}</select>
+ <label for="dm">Material (estimado)</label><input class="field" id="dm" style="width:100%" placeholder="Ex.: algodão" value="${esc(draft.material||"")}"><div class="row"><button class="send" style="padding:13px 20px" id="dsave">Guardar peça</button><button class="btn" id="dcancel">Cancelar</button></div>`;
+}
+document.addEventListener("input",e=>{if(e.target.id==="dn"&&draft){draft.name=e.target.value;const p=parse(e.target.value)[0];if(p){draft.type=p.type;$("#dt").value=p.type;if(p.color){draft.color=p.color;$("#dc").value=p.color}}}});
+render();
+</script></body></html>
